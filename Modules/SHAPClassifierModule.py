@@ -229,12 +229,12 @@ class ShapHelperClassifier:
         Returns
         -------
         Tuple[pd.DataFrame, pd.DataFrame]
-            Dataframes de treino e teste dimensionados
+            Scaled training and test DataFrames
 
         Raises
         ------
         ValueError
-            Se o dimensionamento está ativado mas o escalador não foi inicializado
+            If scaling is enabled but the scaler was not initialized
         """
         X_train, X_test = self._X_train.copy(), self._X_test.copy()
 
@@ -268,21 +268,21 @@ class ShapHelperClassifier:
         scale_categorical: bool = False,
     ) -> None:
         """
-        Treina um modelo único com parâmetros fornecidos.
+        Trains a single model with the provided parameters.
 
         Parameters
         ----------
         params : Dict
             Model parameters
-        model_name : str, padrão="logreg"
-            Tipo de modelo: "logreg", "randomForest" ou "xgboost"
+        model_name : str, default="logreg"
+            Model type: "logreg", "randomForest" or "xgboost"
         scale_categorical : bool, default=False
             Whether to scale categorical features
 
         Raises
         ------
         ValueError
-            Se model_name é inválido
+            If model_name is invalid
         """
         if model_name not in VALID_MODELS:
             raise ValueError(f"Invalid model. Choose from {VALID_MODELS}")
@@ -317,14 +317,14 @@ class ShapHelperClassifier:
 
     def _get_optuna_params(self, trial: optuna.Trial, model_name: str) -> Dict:
         """
-        Gera sugestões de hiperparâmetros Optuna para um modelo.
+        Generates Optuna hyperparameter suggestions for a model.
 
         Parameters
         ----------
         trial : optuna.Trial
-            Objeto trial do Optuna
+            Optuna trial object
         model_name : str
-            Tipo de modelo
+            Model type
 
         Returns
         -------
@@ -389,30 +389,30 @@ class ShapHelperClassifier:
         scale_categorical: bool = False,
     ) -> Tuple[Optional[Union[str, "optuna.storages.BaseStorage"]], Dict, float]:
         """
-        Otimiza hiperparâmetros do modelo usando Optuna.
+        Optimises model hyperparameters using Optuna.
 
         Parameters
         ----------
-        model_name : str, padrão="logreg"
-            Tipo de modelo: "logreg", "randomForest" ou "xgboost"
-        config : OptunaConfig, opcional
-            Configuração do Optuna. Usa padrões se None.
+        model_name : str, default="logreg"
+            Model type: "logreg", "randomForest" or "xgboost"
+        config : OptunaConfig, optional
+            Optuna configuration. Uses defaults if None.
         scale_categorical : bool, default=False
             Whether to scale categorical features
 
         Returns
         -------
         Tuple[Optional[object], Dict, float]
-            (armazenamento_ou_None, melhores_params, melhor_f1_score)
+            (storage_or_None, best_params, best_f1_score)
 
         Raises
         ------
         ImportError
-            Se Optuna não estiver instalado
+            If Optuna is not installed
         ImportError
-            Se o modelo requer biblioteca ausente
+            If the model requires a missing library
         ValueError
-            Se model_name é inválido
+            If model_name is invalid
         """
         if not HAS_OPTUNA:
             raise ImportError(
@@ -426,7 +426,7 @@ class ShapHelperClassifier:
             config = OptunaConfig()
 
         def objective(trial: optuna.Trial) -> float:
-            """Função objetivo do Optuna"""
+            """Optuna objective function"""
             params = self._get_optuna_params(trial, model_name)
             self.train_single_model(
                 params, model_name=model_name, scale_categorical=scale_categorical
@@ -470,14 +470,16 @@ class ShapHelperClassifier:
 
         return storage, best_trial.params, best_value
 
-    def show_optuna_dashboard(self, storage: Union[str, "optuna.storages.BaseStorage"]) -> None:
+    def show_optuna_dashboard(
+        self, storage: Union[str, "optuna.storages.BaseStorage"]
+    ) -> None:
         """
-        Lança dashboard Optuna para visualização de estudo.
+        Launches the Optuna dashboard for study visualisation.
 
         Parameters
         ----------
         storage : object
-            Objeto de armazenamento Optuna de optimize_hyperparameters
+            Optuna storage object returned by optimize_hyperparameters
         """
         if not HAS_OPTUNA:
             raise ImportError("optuna is not installed")
@@ -487,12 +489,12 @@ class ShapHelperClassifier:
 
     def get_results(self) -> Dict:
         """
-        Obtém resultados de treino e métricas.
+        Returns training results and metrics.
 
         Returns
         -------
         Dict
-            Dicionário com modelo, métricas e parâmetros
+            Dictionary containing model, metrics and parameters
         """
         return {
             "model": self._model,
@@ -507,7 +509,7 @@ class ShapHelperClassifier:
         }
 
     def print_metrics(self) -> None:
-        """Imprime métricas do modelo em saída formatada."""
+        """Prints model metrics in a formatted output."""
         if self._model is None:
             logger.warning("No model trained. Call train_single_model() first.")
             return
@@ -518,7 +520,7 @@ class ShapHelperClassifier:
         print(f"F1 Score:  {self._f1:.4f}")
 
     def show_confusion_matrix(self) -> None:
-        """Plota matriz de confusão como mapa de calor."""
+        """Plots the confusion matrix as a heatmap."""
         if self._conf_matrix is None:
             logger.warning("No confusion matrix. Call train_single_model() first.")
             return
@@ -552,26 +554,27 @@ class ShapHelperClassifier:
 
     @staticmethod
     def _format_feature_names(
-        features: List[str], verbosity: VERBOSE_LEVELS = 2
+        features: List[str],
+        verbosity: VERBOSE_LEVELS = 2,
     ) -> List[str]:
         """
-        Formata nomes de features para melhor visualização.
+        Formats feature names for better visualization.
 
-        Extrai partes significativas de padrões de nomenclatura como "WBC_Hematology_Complete_Delta".
+        Extracts significant parts of naming conventions such as “WBC_Hematology_Complete_Delta.”
 
         Parameters
         ----------
         features : List[str]
-            Nomes de features a formatar
-        verbosity : {0, 1, 2}, padrão=2
-            0: Apenas primeira parte ("WBC")
-            1: Primeira + quarta parte ("WBC (Delta)")
-            2: Detalhe completo ("WBC (Hematology-Complete) Delta")
+            Names of features to format
+        verbosity : {0, 1, 2}, default=2
+            0: Only the first part ("WBC")
+            1: First + fourth part ("WBC (Delta)")
+            2: Full detail ("WBC (Hematology-Complete) Delta")
 
         Returns
         -------
         List[str]
-            Nomes de features formatados
+            Formatted feature names
         """
         formatted = []
         pattern = r"([^_]+)_(Hematology|Chemistry)_([^_]+)_([^_]+)"
@@ -596,10 +599,10 @@ class ShapHelperClassifier:
 
     def compute_shap_values(self, scale_categorical: bool = False) -> None:
         """
-        Computa valores SHAP para o modelo treinado.
+        Computes SHAP values for the trained model.
 
-        Seleciona explicador SHAP apropriado com base no tipo de modelo e dimensiona dados
-        se necessário para interpretabilidade.
+        Selects the appropriate SHAP explainer based on model type and scales data
+        if necessary for interpretability.
 
         Parameters
         ----------
@@ -609,9 +612,9 @@ class ShapHelperClassifier:
         Raises
         ------
         ValueError
-            Se modelo não foi treinado ou problemas de escalador
+            If model has not been trained or there are scaler issues
         ImportError
-            Se SHAP não estiver instalado
+            If SHAP is not installed
         """
         if not HAS_SHAP:
             raise ImportError("shap is not installed. Install with: pip install shap")
@@ -660,12 +663,12 @@ class ShapHelperClassifier:
 
     def get_shap_values(self) -> Optional[shap.Explanation]:
         """
-        Obtém valores SHAP computados.
+        Returns the computed SHAP values.
 
         Returns
         -------
         Optional[shap.Explanation]
-            Objeto de explicação SHAP ou None se não foi computado
+            SHAP Explanation object, or None if not yet computed
         """
         return self._shap_values
 
@@ -673,12 +676,12 @@ class ShapHelperClassifier:
 
     def _compute_feature_importance(self) -> pd.DataFrame:
         """
-        Computa valores SHAP absolutos médios por feature.
+        Computes mean absolute SHAP values per feature.
 
         Returns
         -------
         pd.DataFrame
-            Dataframe de importância de feature com colunas Feature e Mean SHAP Value
+            Feature importance DataFrame with columns Feature and Mean SHAP Value
         """
         if self._shap_values is None:
             raise ValueError(
@@ -694,17 +697,17 @@ class ShapHelperClassifier:
 
     def get_top_features(self, n: int) -> List[str]:
         """
-        Obtém as n features mais importantes por valores SHAP.
+        Returns the top n most important features by SHAP values.
 
         Parameters
         ----------
         n : int
-            Número de features principais a retornar
+            Number of top features to return
 
         Returns
         -------
         List[str]
-            Nomes de features principais em ordem de importância
+            Top feature names in order of importance
         """
         importance_df = self._compute_feature_importance()
         return importance_df.head(n)["Feature"].tolist()
@@ -718,21 +721,21 @@ class ShapHelperClassifier:
         verbosity: VERBOSE_LEVELS = 0,
     ) -> None:
         """
-        Plota visualização de resumo SHAP.
+        Plots the SHAP summary visualisation.
 
         Parameters
         ----------
-        max_value : float, padrão=10.0
-            Corta valores SHAP para [-max_value, max_value]
-        rank : Optional[int], padrão=None
-            Se especificado, plota apenas esta feature classificada (1 = mais importante)
-        verbosity : {0, 1, 2}, padrão=0
-            Nível de formatação do nome da feature
+        max_value : float, default=10.0
+            Clips SHAP values to [-max_value, max_value]
+        rank : Optional[int], default=None
+            If specified, plots only this ranked feature (1 = most important)
+        verbosity : {0, 1, 2}, default=0
+            Feature name formatting level
 
         Raises
         ------
         ValueError
-            Se valores SHAP não foram computados
+            If SHAP values have not been computed
         """
         if self._shap_values is None:
             raise ValueError(
@@ -794,21 +797,21 @@ class ShapHelperClassifier:
         verbosity: VERBOSE_LEVELS = 0,
     ) -> None:
         """
-        Plota valores SHAP para uma feature específica.
+        Plots SHAP values for a specific feature.
 
         Parameters
         ----------
-        rank : int, padrão=1
-            Rank da feature (1 = mais importante)
-        color : bool, padrão=False
-            Se deve colorir pontos pelo valor da feature
-        verbosity : {0, 1, 2}, padrão=0
-            Nível de formatação do nome da feature
+        rank : int, default=1
+            Feature rank (1 = most important)
+        color : bool, default=False
+            If True, color points by feature value
+        verbosity : {0, 1, 2}, default=0
+            Feature name formatting level
 
         Raises
         ------
         ValueError
-            Se valores SHAP não foram computados
+            If SHAP values have not been computed
         """
         if self._shap_values is None:
             raise ValueError(
