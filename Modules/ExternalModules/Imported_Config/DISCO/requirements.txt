@@ -1,0 +1,16 @@
+numpy~=2.2.2
+scikit-learn~=1.6.1
+matplotlib~=3.10.0
+seaborn~=0.13.2
+pandas~=2.2.3
+psutil~=6.1.1
+mpire~=2.10.2
+clustpy~=0.0.2
+scipy~=1.15.1
+hdbscan~=0.8.40
+torch~=2.5.1
+dcsi~=0.0.1
+disco~=1.40.4
+networkx~=3.4.2
+tqdm~=4.41.0
+pyparsing~=3.2.1
