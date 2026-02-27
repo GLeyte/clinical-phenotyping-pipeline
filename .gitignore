@@ -1,0 +1,130 @@
+# ============================================================================
+# Python Environments & Cache
+# ============================================================================
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Packages and distributions
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============================================================================
+# IDEs and Editors
+# ============================================================================
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / IntelliJ
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Vim/Emacs swaps
+*.swp
+*.swo
+*~
+.#*
+
+# ============================================================================
+# Jupyter Notebooks & Data Science
+# ============================================================================
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# ============================================================================
+# Project Specific & Large Data Files
+# ============================================================================
+# Ignore local data stores to avoid committing large medical/pipeline data
+data/
+export/
+
+# Common data formats
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.parquet
+*.h5
+*.hdf5
+*.feather
+*.npy
+*.npz
+*.pkl
+*.pickle
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================================================================
+# Logs and Reports
+# ============================================================================
+# Application and metric logs
+*.log
+logs/
+
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+*.opt
+
+# ============================================================================
+# Operating System Files
+# ============================================================================
+# macOS
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
