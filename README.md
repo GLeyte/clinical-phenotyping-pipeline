@@ -1,6 +1,6 @@
 # Clinical Phenotyping Pipeline
 
-End-to-end pipeline for identifying clinical phenotypes in COVID-19 patients using the **MIMIC-IV** database. Covers data extraction, preprocessing, missing data imputation, unsupervised clustering, and SHAP-based explainability.
+End-to-end pipeline for identifying clinical subphenotypes in COVID-19 patients using the **MIMIC-IV** database. Covers data extraction, preprocessing, missing data imputation, unsupervised clustering, and SHAP-based explainability.
 
 To run this pipeline with another dataset ignore the SQL scripts and start from the preprocessing notebooks.
 
