@@ -187,7 +187,23 @@ pip install -r requirements.txt
 
 ## License & Citation
 
-This pipeline uses the **MIMIC-IV** database. Users must complete the required CITI training, sign the PhysioNet Data Use Agreement, and cite MIMIC-IV in publications:
+Leite, G. de F., Santanchè, A., & Jorge, S. E. D. C. (2026). Pipeline for identifying COVID-19 clinical subphenotypes using MIMIC-IV data (Version V1). Repositório de Dados de Pesquisa da Unicamp. https://doi.org/10.25824/redu/LHGTZB
 
-> Johnson, A., Bulgarelli, L., Pollard, T., Horng, S., Celi, L. A., & Mark, R. (2023).
-> MIMIC-IV (version 2.2). PhysioNet. https://doi.org/10.13026/6mm1-ek67
+### BibTeX
+
+```bash
+@data{redu/LHGTZB_2026,
+author = {Leite, Gabriel de Freitas and Santanchè, André and Jorge, Susan Elisabeth Domingues Costa},
+publisher = {Repositório de Dados de Pesquisa da Unicamp},
+title = {{Pipeline for identifying COVID-19 clinical subphenotypes using MIMIC-IV data}},
+year = {2026},
+version = {V1},
+doi = {10.25824/redu/LHGTZB},
+url = {https://doi.org/10.25824/redu/LHGTZB}
+}
+```
+
+## Author
+
+Author: Gabriel de Freitas Leite
+Institute of Computing, State University of Campinas (UNICAMP)
